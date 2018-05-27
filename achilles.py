@@ -166,4 +166,4 @@ if __name__ == '__main__':
         os.system('cls')
     prompt = MyPrompt()
     prompt.prompt = 'achilles>> '
-    prompt.cmdloop('Starting prompt...')
+    prompt.cmdloop('Starting achilles...\n\nUsage: command argument\n\nExample: ssl 127.0.0.1\n\nType help to start\n')

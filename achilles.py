@@ -1,3 +1,4 @@
+import subprocess
 import os
 import re
 from cmd import Cmd
@@ -29,7 +30,7 @@ class MyPrompt(Cmd):
     def do_ssl(self, args):
         """Runs a number of nmap scripts for SSL info"""
         if len(args) == 0:
-            print "You must enter an ip address (Example: ssl 127.0.0.1)"
+            print "You must enter an ip address and port to scan (Example: ssl 127.0.0.1 443)"
         else:
             # os.system('nmap --script  -p 443 ' + args)
             print ("""
@@ -39,7 +40,11 @@ class MyPrompt(Cmd):
             ******************
             
             """)
-            os.system('nmap --script ssl-cert -p 443 ' + args)
+            ssl = 'nmap --script ssl-cert '
+            host = args[0]
+            port = ' -p ' + args[1]
+            all = ssl + port + host
+            os.system(all)
             print ("""
 
             ***********************************
@@ -47,7 +52,11 @@ class MyPrompt(Cmd):
             ***********************************
 
                         """)
-            os.system('nmap --script ssl-cert-intaddr -p 443 ' + args)
+            ssl = 'nmap --script ssl-cert-intaddr '
+            host = args[0]
+            port = ' -p ' + args[1]
+            all = ssl + port + host
+            os.system(all)
             print ("""
 
             ******************************
@@ -55,7 +64,12 @@ class MyPrompt(Cmd):
             ******************************
 
                         """)
-            os.system('nmap --script sslv2 -p 443 ' + args)
+            ssl = 'nmap --script=sslv2 '
+            host = args[0]
+            port = ' -p ' + args[1]
+            all = ssl + port + host
+            os.system(all)
+            os.system('nmap --script  -p 443 ' + args)
             print ("""
 
             ***********************
@@ -63,7 +77,11 @@ class MyPrompt(Cmd):
             ***********************
             
                         """)
-            os.system('nmap --script ssl-enum-ciphers -p 443 ' + args)
+            ssl = 'nmap --script=ssl-enum-ciphers '
+            host = args[0]
+            port = ' -p ' + args[1]
+            all = ssl + port + host
+            os.system(all)
             print ("""
 
             *****************************
@@ -71,7 +89,11 @@ class MyPrompt(Cmd):
             *****************************
             
                         """)
-            os.system('nmap --script ssl-known-key -p 443 ' + args)
+            ssl = 'nmap --script=ssl-known-key '
+            host = args[0]
+            port = ' -p ' + args[1]
+            all = ssl + port + host
+            os.system(all)
             print ("""
 
             ********************************
@@ -79,7 +101,11 @@ class MyPrompt(Cmd):
             ********************************
 
                         """)
-            os.system('nmap --script ssl-dh-params -p 443 ' + args)
+            ssl = 'nmap --script=ssl-dh-params '
+            host = args[0]
+            port = ' -p ' + args[1]
+            all = ssl + port + host
+            os.system(all)
             print ("""
 
             *******************************
@@ -87,7 +113,11 @@ class MyPrompt(Cmd):
             *******************************
             
                         """)
-            os.system('nmap --script ssl-ccs-injection -p 443 ' + args)
+            ssl = 'nmap --script=ssl-ccs-injection '
+            host = args[0]
+            port = ' -p ' + args[1]
+            all = ssl + port + host
+            os.system(all)
             print ("""
 
             ************************
@@ -95,7 +125,11 @@ class MyPrompt(Cmd):
             ************************
             
                         """)
-            os.system('nmap --script ssl-poodle -p 443 ' + args)
+            ssl = 'nmap --script=ssl-poodle '
+            host = args[0]
+            port = ' -p ' + args[1]
+            all = ssl + port + host
+            os.system(all)
             print ("""
 
             ****************************
@@ -103,7 +137,12 @@ class MyPrompt(Cmd):
             ****************************
 
                         """)
-            os.system('nmap --script ssl-heartbleed -p 443 ' + args)
+            ssl = 'nmap --script=ssl-heartbleed'
+            host = args[0]
+            port = ' -p ' + args[1]
+            all = ssl + port + host
+            os.system(all)
+            os.system('nmap --script  -p 443 ' + args)
             print ("""
 
             *****************************
@@ -111,7 +150,11 @@ class MyPrompt(Cmd):
             *****************************
 
                         """)
-            os.system('nmap --script sslv2-drown -p 443 ' + args)
+            ssl = 'nmap --script=sslv2-drown '
+            host = args[0]
+            port = ' -p ' + args[1]
+            all = ssl + port + host
+            os.system(all)
             print ("""
 
             ************************************
@@ -119,7 +162,11 @@ class MyPrompt(Cmd):
             ************************************
 
                         """)
-            os.system('nmap --script tls-ticketbleed -p 443 ' + args)
+            ssl = 'nmap --script=tls-ticketbleed '
+            host = args[0]
+            port = ' -p ' + args[1]
+            all = ssl + port + host
+            os.system(all)
 
     def do_shodan(self, args):
         """Run ip address against shodan database"""
@@ -155,15 +202,20 @@ class MyPrompt(Cmd):
         raise SystemExit
 
 if __name__ == '__main__':
-    if os.geteuid() != 0:
-        print('You must run this script as root!!!')
-        exit()
     if platform == "linux" or platform == "linux2":
-        os.system('clear')
+        if os.geteuid() != 0:
+            print('You must run this script as root!!!')
+            exit()
+        else:
+            os.system('clear')
     elif platform == "darwin":
-        os.system('clear')
+        if os.geteuid() != 0:
+            print('You must run this script as root!!!')
+            exit()
+        else:
+            os.system('clear')
     elif platform == "win32":
         os.system('cls')
     prompt = MyPrompt()
     prompt.prompt = 'achilles>> '
-    prompt.cmdloop('Starting achilles...\n\nUsage: command argument\n\nExample: ssl 127.0.0.1\n\nType help to start\n')
+    prompt.cmdloop('Starting achilles...\n\nUsage: <command> <argument>\n\nExample: ssl 127.0.0.1\n\nType help to start\n')
